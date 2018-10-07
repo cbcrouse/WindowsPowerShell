@@ -2,7 +2,7 @@ Write-Host "CUAH Master Profile loaded." -ForegroundColor Yellow -BackgroundColo
 
 $Modules  = @( Get-ChildItem -Recurse -Path "$PSScriptRoot\Modules\*.psm1" -ErrorAction SilentlyContinue )
 
-#Dot source the files
+#Import all modules
 Write-Host "Loading modules..." -ForegroundColor DarkBlue
 Foreach($import in $Modules)
 {
