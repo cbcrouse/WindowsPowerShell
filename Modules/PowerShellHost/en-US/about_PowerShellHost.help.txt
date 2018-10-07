@@ -1,0 +1,19 @@
+PSTOPIC
+    about_PowerShellHost
+
+SHORT DESCRIPTION
+    This is a PowerShell module that has helpers functions for any PowerShell host.
+
+LONG DESCRIPTION
+    There are several different PowerShell hosts such as ISE, VS Code, Visual Studio Package Manager Console, and PowerShell.
+
+    Each host looks and feels, and sometimes behaves a little differently. 
+
+    This module provides several functions to help get information about the current host as well as quality of life helpers.
+
+DETAILED DESCRIPTION
+    There are a few functions:
+        Show-ConsoleColors:   This writes out all available colors available to the console through Write-Host as well as different color combinations.
+
+LINK
+    https://github.com/cbcrouse/WindowsPowerShell
