@@ -23,11 +23,18 @@ function Remove-FilesOlderThan()
         $BaseDirectory
     )
 
-    $dateThreshold = (Get-Date).AddDays(-$Days)
+    if (Test-Path -Path $BaseDirectory)
+    {
+        $dateThreshold = (Get-Date).AddDays(-$($Days))
 
-    # Delete files older than the $dateThreshold.
-    Get-ChildItem -Path $BaseDirectory -Recurse -Force  Where-Object { !$_.PSIsContainer -and $_.CreationTime -lt $dateThreshold }  Remove-Item -Force
+        # Delete files older than the $dateThreshold.
+        Get-ChildItem -Path $BaseDirectory -Recurse -Force | Where-Object { !$_.PSIsContainer -and $_.CreationTime -lt $dateThreshold } | Remove-Item -Force
 
-    # Delete any empty directories left behind after deleting the old files.
-    Get-ChildItem -Path $BaseDirectory -Recurse -Force  Where-Object { $_.PSIsContainer -and $null -eq (Get-ChildItem -Path $_.FullName -Recurse -Force  Where-Object { !$_.PSIsContainer }) }  Remove-Item -Force -Recurse
+        # Delete any empty directories left behind after deleting the old files.
+        Get-ChildItem -Path $BaseDirectory -Recurse -Force | Where-Object { $_.PSIsContainer -and $null -eq (Get-ChildItem -Path $_.FullName -Recurse -Force | Where-Object { !$_.PSIsContainer }) } | Remove-Item -Force -Recurse
+    }
+    else
+    {
+        Write-Error "Directory not found."
+    }
 }
