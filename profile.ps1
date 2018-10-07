@@ -1,7 +1,13 @@
 Write-Host "CUAH Master Profile loaded." -ForegroundColor Yellow -BackgroundColor Black
 
-function Get-ProfileInUse()
+#######################################
+## IMPORT MODULES
+#######################################
+$modulesDir = Join-Path -Path $(Get-Location) -ChildPath "Modules"
+$modules = Get-ChildItem -Path $modulesDir -Filter "*.psm1" -Recurse
+foreach($module in $modules)
 {
-    Write-Host "CUAH is in use."
+    $fileName = [System.IO.Path]::GetFileNameWithoutExtension($module)
+    Write-Host "Importing module: $fileName" -ForegroundColor DarkBlue
+    Import-Module -Name $module
 }
-
