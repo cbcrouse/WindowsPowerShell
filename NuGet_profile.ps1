@@ -5,18 +5,18 @@ Write-Host "NuGet Profile loaded." -ForegroundColor Yellow -BackgroundColor Blac
 function Get-EventLogs ($LogName="application", [int]$PageSize = 10)
 {
     $index = 0
-    $allLogs = Measure-Time -Script { Get-EventLog $LogName } -Name "GET ALL LOGS"
-    $allLogs = Measure-Time -Script { $allLogs | Sort-Object -Property Index -Descending } -Name "SORT ALL LOGS"
+    $allLogs = Get-EventLog $LogName
+    $allLogs = $allLogs | Sort-Object -Property Index -Descending
     do
     {
         if ($index -eq 0)
         {
-            $eventLogs = Measure-Time -Script { $allLogs | Select-Object -First $PageSize } -Name "TAKE $($PageSize) LOGS"
+            $eventLogs = $allLogs | Select-Object -First $PageSize
         }
         else
         {
-            $eventLogs = Measure-Time -Script { $($allLogs | Where-Object {$_.Index -lt $index}) } -Name "GET NEXT LOGS AFTER INDEX - $($index)"
-            $first10 = Measure-Time -Script { $eventLogs | Select-Object -First $PageSize } -Name "TAKE $($PageSize) LOGS"
+            $eventLogs = $($allLogs | Where-Object {$_.Index -lt $index})
+            $first10 = $eventLogs | Select-Object -First $PageSize
             $eventLogs = $first10
         }
         if ($null -ne $eventLogs)
@@ -32,11 +32,6 @@ function Get-EventLogs ($LogName="application", [int]$PageSize = 10)
         $eventLogs
     }
     while($(Read-Host -Prompt "Press Enter to get load more... Enter 'c' to cancel.") -ne 'c' -and $index -ne 0)
-
-    $elapsedList.RemoveAt(0)
-    $elapsedList.RemoveAt(0)
-    $stats = $elapsedList | Measure-Object -Average TotalSeconds
-    "Average Page Time: $($stats.Average)"
 }
 
 function Measure-Time([scriptblock]$Script, [string]$Name)
