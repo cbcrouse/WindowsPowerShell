@@ -8,7 +8,7 @@
 .EXAMPLE
     C:\PS> New-TemplateModule
 .OUTPUTS
-    String    
+    Directories and files    
 .NOTES
     Author:         Casey Crouse
     Created On:     10/07/2018
@@ -16,8 +16,6 @@
 function New-TemplateModule()
 {
     [CmdletBinding()]
-    [OutputType([String])]
-
     param(
         [Parameter(Mandatory=$true, Position = 0, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true)]
         [string]$ModuleName
