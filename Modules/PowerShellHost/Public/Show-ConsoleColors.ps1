@@ -6,8 +6,12 @@
 .EXAMPLE
     C:\PS> Show-ConsoleColors
 .OUTPUTS
-    String    
+    String
 .NOTES
+    Author:         Casey Crouse
+    Created On:     10/07/2018
+
+    Additional Information:
     The color combinations are limited. Depending on your host's background color, some colors may be difficult to see.
 #>
 function Show-ConsoleColors()
