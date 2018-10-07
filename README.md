@@ -1,4 +1,4 @@
-# WindowsPowerShell Profiles
+# WindowsPowerShell
 
 Welcome! This repository is designed to hold PowerShell profiles, modules, and scripts for easy back-up and re-use.
 
