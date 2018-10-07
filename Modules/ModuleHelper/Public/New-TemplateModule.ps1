@@ -6,14 +6,14 @@
 .PARAMETER ModuleName
     The name of the new module
 .EXAMPLE
-    C:\PS> New-Module
+    C:\PS> New-TemplateModule
 .OUTPUTS
     String    
 .NOTES
     Author:         Casey Crouse
     Created On:     10/07/2018
 #>
-function New-ModuleTemplate()
+function New-TemplateModule()
 {
     [CmdletBinding()]
     [OutputType([String])]
