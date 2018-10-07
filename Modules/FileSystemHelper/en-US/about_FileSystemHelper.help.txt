@@ -1,0 +1,15 @@
+PSTOPIC
+    about_FileSystem
+
+SHORT DESCRIPTION
+    This is a PowerShell module that has helpers functions for the Windows file system.
+
+LONG DESCRIPTION
+    This module provides several functions that help with the different operations of the Windows file system.
+
+DETAILED DESCRIPTION
+    There are a few functions:
+        Remove-FilesOlderThan:   This function deletes files recursively in a base directory older than specified days.
+
+LINK
+    https://github.com/cbcrouse/WindowsPowerShell
