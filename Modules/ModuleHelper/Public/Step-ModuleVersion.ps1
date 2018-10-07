@@ -32,11 +32,10 @@
 function Step-ModuleVersion {
     [CmdletBinding()]
     param(
-        # Specifies a path a valid Module Manifest file.
         [Parameter(Position=0,
                    ValueFromPipeline=$true,
                    ValueFromPipelineByPropertyName=$true,
-                   HelpMessage="Path to one or more locations.")]
+                   HelpMessage="Path to a valid Module Manifest file.")]
         [Alias("PSPath")]
         [ValidateScript({ Test-Path $_ -PathType Leaf })]
         [string]
@@ -50,47 +49,40 @@ function Step-ModuleVersion {
         $By = "Patch"
     )
 
-    Begin
+    if (-not $PSBoundParameters.ContainsKey("Path"))
     {
-        if (-not $PSBoundParameters.ContainsKey("Path"))
-        {
-            $Path = (Get-Item $PWD\*.psd1)[0]
-        }
+        $Path = (Get-Item $PWD\*.psd1)[0]
     }
 
-    Process
+    $manifest = Import-PowerShellDataFile -Path $Path
+    $newVersion = Step-Version $manifest.ModuleVersion $By
+    $manifest.Remove("ModuleVersion")
+
+    $manifest.ModuleVersion = $newVersion
+    $manifest.FunctionsToExport = $manifest.FunctionsToExport | ForEach-Object {$_}
+    $manifest.NestedModules = $manifest.NestedModules | ForEach-Object {$_}
+    $manifest.RequiredModules = $manifest.RequiredModules | ForEach-Object {$_}
+    $manifest.ModuleList = $manifest.ModuleList | ForEach-Object {$_}
+
+    if ($manifest.ContainsKey("PrivateData") -and $manifest.PrivateData.ContainsKey("PSData"))
     {
-        
-        $manifest = Import-PowerShellDataFile -Path $file
-        $newVersion = Step-Version $manifest.ModuleVersion $By
-        $manifest.Remove("ModuleVersion")
-
-        $manifest.ModuleVersion = $newVersion
-        $manifest.FunctionsToExport = $manifest.FunctionsToExport | ForEach-Object {$_}
-        $manifest.NestedModules = $manifest.NestedModules | ForEach-Object {$_}
-        $manifest.RequiredModules = $manifest.RequiredModules | ForEach-Object {$_}
-        $manifest.ModuleList = $manifest.ModuleList | ForEach-Object {$_}
-
-        if ($manifest.ContainsKey("PrivateData") -and $manifest.PrivateData.ContainsKey("PSData"))
+        foreach ($node in $manifest.PrivateData["PSData"].GetEnumerator())
         {
-            foreach ($node in $manifest.PrivateData["PSData"].GetEnumerator())
+            $key = $node.Key
+            if ($node.Value.GetType().Name -eq "Object[]")
             {
-                $key = $node.Key
-                if ($node.Value.GetType().Name -eq "Object[]")
-                {
-                    $value = $node.Value | ForEach-Object {$_}
-                }
-                else
-                {
-                    $value = $node.Value
-                }
-
-                $manifest[$key] = $value
+                $value = $node.Value | ForEach-Object {$_}
             }
-            $manifest.Remove("PrivateData")
-        }
+            else
+            {
+                $value = $node.Value
+            }
 
-        New-ModuleManifest -Path $file @manifest
-        return $newVersion
+            $manifest[$key] = $value
+        }
+        $manifest.Remove("PrivateData")
     }
+
+    New-ModuleManifest -Path $Path @manifest
+    return $newVersion
 }
