@@ -1,0 +1,18 @@
+PSTOPIC
+    about_ModuleHelper
+
+SHORT DESCRIPTION
+    This is a PowerShell module that has helpers functions for PowerShell modules.
+
+LONG DESCRIPTION
+    There is a lot to know about PowerShell modules including versions, help information, and available commands.
+
+    This module provides several functions that help with creating new modules, new functions, and help documentation from templates.
+
+DETAILED DESCRIPTION
+    There are a few functions:
+        New-Module:   This function creates a new module with several new directories and templated help documentation and manifest in the WindowsPowerShell directory.
+        New-Function: This function creates a new function script file in a directory of the specified module.
+
+LINK
+    https://github.com/cbcrouse/WindowsPowerShell
