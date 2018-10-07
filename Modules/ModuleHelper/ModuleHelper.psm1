@@ -15,7 +15,4 @@ Foreach($import in @($Public + $Private))
     }
 }
 
-Set-Alias -Name Step-ModuleVersions -Value "$PSScriptRoot\Scripts\Build-Modules.ps1"
-
-Export-ModuleMember -Alias Step-ModuleVersions
 Export-ModuleMember -Function $Public.Basename
