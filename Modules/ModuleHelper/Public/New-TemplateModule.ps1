@@ -21,5 +21,5 @@ function New-TemplateModule()
         [string]$ModuleName
     )
 
-    Write-Error "Not Implemented."
+    Return "Missing implementation"
 }
