@@ -14,9 +14,9 @@ function Step-ModuleVersions()
 {
     param(
         [Parameter(Position=0, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true)]
-        [string]$ModuleName
+        [string]$ModuleFilter
     )
-    $script:UserModules  = @( Get-ChildItem -Recurse -Path "$env:USERPROFILE\Documents\WindowsPowerShell\Modules\*.psm1" -ErrorAction SilentlyContinue -Filter $ModuleName )
+    $script:UserModules  = @( Get-ChildItem -Recurse -Path "$env:USERPROFILE\Documents\WindowsPowerShell\Modules\*.psm1" -ErrorAction SilentlyContinue -Filter $ModuleFilter )
 
     Foreach($module in $UserModules)
     {
@@ -35,7 +35,7 @@ function Step-ModuleVersions()
                 Set-ModuleFunctions -Name $ManifestPath -FunctionsToExport $functions
             }
 
-            Write-Host "Detecting semantic versioning for: " -ForegroundColor Yellow -NoNewline; Write-Host $script:ModuleName -ForegroundColor DarkBlue
+            Write-Host "Detecting semantic versioning for: " -ForegroundColor Yellow -NoNewline; Write-Host "$ModuleName" -ForegroundColor DarkBlue
             Import-Module $ManifestPath
             $commandList = Get-Command -Module $ModuleName
             $version = $(Get-Module -Name $ModuleName).Version
