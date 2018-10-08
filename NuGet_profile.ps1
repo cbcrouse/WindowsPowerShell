@@ -45,5 +45,3 @@ function Measure-Time([scriptblock]$Script, [string]$Name)
     
     return $value
 }
-
-Get-EventLogs -PageSize 2000
