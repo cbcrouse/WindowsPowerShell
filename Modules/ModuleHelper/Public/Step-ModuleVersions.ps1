@@ -32,13 +32,13 @@ function Step-ModuleVersions()
                 Set-ModuleFunctions -Name $ManifestPath -FunctionsToExport $functions
             }
 
-            Write-Output "  Detecting semantic versioning"
+            Write-Host "Detecting semantic versioning for: " -ForegroundColor Yellow -NoNewline; Write-Host $script:ModuleName -ForegroundColor DarkBlue
             Import-Module $ManifestPath
             $commandList = Get-Command -Module $ModuleName
             $version = $(Get-Module -Name $ModuleName).Version
             Remove-Module $ModuleName
 
-            Write-Output "    Calculating fingerprint"
+            Write-Host "`tCalculating fingerprint"
             $fingerprint = foreach ($command in $commandList )
             {
                 foreach ($parameter in $command.parameters.keys)
@@ -59,9 +59,9 @@ function Step-ModuleVersions()
             }
 
             $bumpVersionType = 'Patch'
-            '    Detecting new features'
+            Write-Host "`tDetecting new features"
             $fingerprint | Where-Object {$_ -notin $oldFingerprint } | % {$bumpVersionType = 'Minor'; "      $_"}
-            '    Detecting breaking changes'
+            Write-Host "`tDetecting breaking changes"
             $oldFingerprint | Where-Object {$_ -notin $fingerprint } | % {$bumpVersionType = 'Major'; "      $_"}
 
             Set-Content -Path $FingerprintPath -Value $fingerprint -Force
@@ -80,9 +80,9 @@ function Step-ModuleVersions()
                 }
             }
 
-            Write-Output "  Stepping [$bumpVersionType] version [$version]"
+            Write-Host "`tStepping [$bumpVersionType] version [$version]"
             $version = [version] (Step-ModuleVersion -Path $ManifestPath -By $bumpVersionType)
-            Write-Output "  Using version: $version"
+            Write-Host "`tUsing version: $version"
         }
         Catch
         {
