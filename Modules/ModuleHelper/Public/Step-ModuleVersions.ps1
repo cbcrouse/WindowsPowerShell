@@ -12,7 +12,11 @@
 #>
 function Step-ModuleVersions()
 {
-    $script:UserModules  = @( Get-ChildItem -Recurse -Path "$env:USERPROFILE\Documents\WindowsPowerShell\Modules\*.psm1" -ErrorAction SilentlyContinue )
+    param(
+        [Parameter(Position=0, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true)]
+        [string]$ModuleName
+    )
+    $script:UserModules  = @( Get-ChildItem -Recurse -Path "$env:USERPROFILE\Documents\WindowsPowerShell\Modules\*.psm1" -ErrorAction SilentlyContinue -Filter $ModuleName )
 
     Write-Host "Updating module versions..." -ForegroundColor DarkBlue
     Foreach($module in $UserModules)
