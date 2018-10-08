@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/16m33dskjlk2ao20?svg=true)](https://ci.appveyor.com/project/cbcrouse/windowspowershell)
+
 # WindowsPowerShell
 
 Welcome! This repository is designed to hold PowerShell profiles, modules, and scripts for easy back-up and re-use.
