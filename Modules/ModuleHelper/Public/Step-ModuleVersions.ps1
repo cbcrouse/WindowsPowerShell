@@ -62,13 +62,16 @@ function Step-ModuleVersions()
                 New-Item -Path $FingerprintPath -ItemType File
             }
 
+            Set-Content -Path $FingerprintPath -Value $fingerprint -Force
+            $fingerprint = Get-Content $FingerprintPath
+
             $bumpVersionType = 'Patch'
             Write-Host "`tDetecting new features"
             $fingerprint | Where-Object {$_ -notin $oldFingerprint } | % {$bumpVersionType = 'Minor'; "      $_"}
             Write-Host "`tDetecting breaking changes"
             $oldFingerprint | Where-Object {$_ -notin $fingerprint } | % {$bumpVersionType = 'Major'; "      $_"}
 
-            Set-Content -Path $FingerprintPath -Value $fingerprint -Force
+            
 
             # Bump the module version
             if ($version -lt ([version]'1.0.0'))
